@@ -1,5 +1,7 @@
+from decimal import Decimal
 import requests
 
+from .exceptions import CryptoApiError, UnknowCryptoError
 from .mixer import Mixer
 
 
@@ -287,3 +289,38 @@ class Crypto(object):
             f"&currency={currency}"
         )
         return response.json()
+    
+    def get_balance(
+        self,
+        currency: str
+    ) -> Decimal:
+        """Get wallet balance depending on given currency
+        
+        Args:
+            currency (str): ticker of currency
+        Raises:
+            AssertionError: if currency is not supported
+            CryptoApiError: if errors from crypto APIs recieved
+            UnknownCryptoError: if no result in crypto APIs response
+        """
+        assert self.is_token_supported(currency), f"{currency} has been misspelled or not supported yet"
+
+        key, url, api = self.get_key_and_url(currency)
+        token = currency.upper() if api in ["crypto", "eth", "bnb"] else currency
+          
+        data = requests.get(
+            f'{url}/.balance?'
+            f'key={key}'
+            f'&{"currency" if api in ["crypto", "eth", "bnb"] else "token"}={token}'
+        )
+        response = data.json()
+        error = response.get("error")
+
+        if error:
+            raise CryptoApiError(error)
+        
+        if not response.get("result"):
+            raise UnknowCryptoError(response)
+
+        return Decimal(response["result"])
+
