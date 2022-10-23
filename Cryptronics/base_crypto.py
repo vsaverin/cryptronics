@@ -133,11 +133,13 @@ class Crypto(object):
                 f'tag={tag}&'
                 f'token={token}'
             )
+            return response.json()['result']['address']
         elif api in ('eth', 'bnb'):
             response = requests.get(
                 f'{url}/.give?'
                 f'key={key}&'
             )
+            return response.json()
         elif api in ('cryptocurrency'):
             response = requests.get(
                 f'{url}/.give?'
@@ -145,7 +147,7 @@ class Crypto(object):
                 f'tag={tag}&'
                 f'currency={token.upper()}'
             )
-        return response.json()
+            return response.json()
 
     def get_key_and_url(
         self,
@@ -225,7 +227,10 @@ class Crypto(object):
                 return TypeError(f"Token {token} is not supported")
 
             wallet = self.create_wallet(token, f"{tag}-{token}")
-            address = wallet.get('result')
+            try:
+                address = wallet.get('result')
+            except AttributeError:
+                address = wallet
             if address:
                 wallets.append(
                     {

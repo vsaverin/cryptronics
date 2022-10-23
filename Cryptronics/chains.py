@@ -29,10 +29,17 @@ class Litecoin(object):
         #     port=port
         # )
 
-    def generate_wallet(self):
+    def generate_wallet(self) -> namedtuple:
         priv = PrivateKey()
         pub = priv.get_public_key()
-        return [priv.to_wif(), pub.get_address().to_string()]
+        Wallet = namedtuple('Wallet', (
+            'private',
+            'public'
+        ))
+        return Wallet(
+            priv.to_wif(),
+            pub.get_address().to_string()
+        )
 
 
 class Binance(object):
@@ -141,27 +148,7 @@ class TronChain(object):
 
 
 if __name__ == '__main__':
-    # ltc = Litecoin(address='127.0.0.1', port=1234)
-    # private, public = ltc.generate_wallet()
-    # print(f"Private: {private}")
-    # print(f"Public: {public}")
-
-    tpr = 'ebd3747067bf9a54f297ec9ad465f74dc91d1144e1500b8c927de44f56dbb327'
-    tpu = 'TN5oryHGWRcKpjAw3BY1xTXVhCDy4S9pRW'
-    trx = TronChain()
-
-    print(trx.get_balance('TN5oryHGWRcKpjAw3BY1xTXVhCDy4S9pRW'))
-    print(trx.get_token_balance('TN5oryHGWRcKpjAw3BY1xTXVhCDy4S9pRW', 'SWH'))
-
-    # account = trx.generate_account()
-    # print(account.public)
-    # print(account.private)
-
-    # response = trx.send(
-    #     to='TGHPsf5eMXgFNiLeuSfueK8xZJWahtYxrY',
-    #     amount=1.0,
-    #     private_from=tpr,
-    #     public_from=tpu
-    # )
-    # for k, v in response.items():
-    #     print(k, v)
+    ltc = Litecoin(address='127.0.0.1', port=1234)
+    private, public = ltc.generate_wallet()
+    print(f"Private: {private}")
+    print(f"Public: {public}")
