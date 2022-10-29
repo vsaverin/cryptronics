@@ -1,57 +1,14 @@
+# Local dep's
+from custom_types import Account
+
 # Base dep's
-from collections import namedtuple
 import requests
 import json
-
-# Litecoin dep's
-from litecoinutils.keys import PrivateKey
-from litecoinutils.setup import setup
 
 # Tron dep's
 from tronapi import Tron
 from tronapi.transactionbuilder import TransactionBuilder
 from tronapi.common.transactions import wait_for_transaction_id
-
-
-class Litecoin(object):
-    def __init__(
-        self,
-        address: str,
-        port: int,
-        username: str = None,
-        password: str = None
-    ):
-        setup('mainnet')
-        # self.PROXY = NodeProxy(
-        #     rpcuser=username,
-        #     rpcpassword=password,
-        #     host=address,
-        #     port=port
-        # )
-
-    def generate_wallet(self) -> namedtuple:
-        priv = PrivateKey()
-        pub = priv.get_public_key()
-        Wallet = namedtuple('Wallet', (
-            'private',
-            'public'
-        ))
-        return Wallet(
-            priv.to_wif(),
-            pub.get_address().to_string()
-        )
-
-
-class Binance(object):
-    pass
-
-
-class Doge(object):
-    pass
-
-
-class Xmr(object):
-    pass
 
 
 class TronChain(object):
@@ -77,19 +34,15 @@ class TronChain(object):
             event_server=event_server
         )
 
-    def generate_account(self) -> namedtuple:
+    def generate_account(self) -> Account:
         account = self.TRON.create_account
-        User = namedtuple('Account', (
-            'private',
-            'public'
-        ))
         hex = self.TRON.address.to_hex(
             account.address['base58']
         )
         print(hex)
-        return User(
-            public=account.address['base58'],
-            private=account.private_key
+        return Account(
+            public_key=account.address['base58'],
+            private_key=account.private_key
         )
 
     def send(
@@ -145,10 +98,3 @@ class TronChain(object):
 
     def from_hex(self, address):
         return self.TRON.address.from_hex(address)
-
-
-if __name__ == '__main__':
-    ltc = Litecoin(address='127.0.0.1', port=1234)
-    private, public = ltc.generate_wallet()
-    print(f"Private: {private}")
-    print(f"Public: {public}")

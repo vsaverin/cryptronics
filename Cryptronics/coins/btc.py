@@ -1,0 +1,2 @@
+class BitcoinChain(object):
+    pass

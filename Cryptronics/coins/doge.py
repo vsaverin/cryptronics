@@ -1,0 +1,2 @@
+class DogeChain(object):
+    pass

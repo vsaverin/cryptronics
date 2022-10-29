@@ -37,6 +37,17 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "cffi"
+version = "1.15.1"
+description = "Foreign Function Interface for Python calling C code."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+pycparser = "*"
+
+[[package]]
 name = "charset-normalizer"
 version = "2.1.1"
 description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
@@ -247,6 +258,14 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "ipaddress"
+version = "1.0.23"
+description = "IPv4/IPv6 manipulation library"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "litecoin-utils"
 version = "0.5.4"
 description = "Litecoin utility functions"
@@ -259,6 +278,22 @@ base58check = "1.0.2"
 ecdsa = "0.17.0"
 python-bitcoinrpc = "1.0"
 sympy = "1.3"
+
+[[package]]
+name = "monero"
+version = "1.1.1"
+description = "A comprehensive Python module for handling Monero cryptocurrency"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+ipaddress = "*"
+pycryptodomex = ">=3.14,<4.0"
+pynacl = ">=1.4,<2.0"
+pysocks = ">=1.7,<2.0"
+requests = "*"
+varint = "*"
 
 [[package]]
 name = "mpmath"
@@ -284,12 +319,51 @@ python-versions = "*"
 six = ">=1.9.0"
 
 [[package]]
+name = "pycparser"
+version = "2.21"
+description = "C parser in Python"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+
+[[package]]
 name = "pycryptodome"
 version = "3.15.0"
 description = "Cryptographic library for Python"
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+
+[[package]]
+name = "pycryptodomex"
+version = "3.15.0"
+description = "Cryptographic library for Python"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+
+[[package]]
+name = "pynacl"
+version = "1.5.0"
+description = "Python binding to the Networking and Cryptography (NaCl) library"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+cffi = ">=1.4.1"
+
+[package.extras]
+docs = ["sphinx (>=1.6.5)", "sphinx-rtd-theme"]
+tests = ["pytest (>=3.2.1,!=3.3.0)", "hypothesis (>=3.27.0)"]
+
+[[package]]
+name = "pysocks"
+version = "1.7.1"
+description = "A Python SOCKS client module. See https://github.com/Anorov/PySocks for more information."
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "python-bitcoinrpc"
@@ -416,16 +490,25 @@ brotli = ["brotlicffi (>=0.8.0)", "brotli (>=1.0.9)", "brotlipy (>=0.6.0)"]
 secure = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)", "idna (>=2.0.0)", "certifi", "urllib3-secure-extra", "ipaddress"]
 socks = ["PySocks (>=1.5.6,!=1.5.7,<2.0)"]
 
+[[package]]
+name = "varint"
+version = "1.0.2"
+description = "Simple python varint implementation"
+category = "main"
+optional = false
+python-versions = "*"
+
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "53128b850a3f51dc40cb7840c6f0710f0d5a2306f6e52c71034a5303d6f925bd"
+content-hash = "31c942fe1352bb2088b35784aaa70a85e987869496e7d9cc902662df61eea010"
 
 [metadata.files]
 attrdict = []
 base58 = []
 base58check = []
 certifi = []
+cffi = []
 charset-normalizer = []
 cytoolz = []
 ecdsa = []
@@ -439,10 +522,16 @@ eth-typing = []
 eth-utils = []
 hexbytes = []
 idna = []
+ipaddress = []
 litecoin-utils = []
+monero = []
 mpmath = []
 parsimonious = []
+pycparser = []
 pycryptodome = []
+pycryptodomex = []
+pynacl = []
+pysocks = []
 python-bitcoinrpc = []
 requests = []
 rlp = []
@@ -452,3 +541,4 @@ toolz = []
 tronapi = []
 trx-utils = []
 urllib3 = []
+varint = []
