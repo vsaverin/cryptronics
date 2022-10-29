@@ -99,7 +99,7 @@ class Crypto(object):
                 f'&{"currency" if api=="crypto" else "token"}={token}'
                 f'&amount={amount}'
                 f'&tag={tag}'
-                f'&from={from_address}' if from_address else ''
+                f'{f"&from={from_address}" if from_address else ""}'
             )
             response = data.json()
         else:
