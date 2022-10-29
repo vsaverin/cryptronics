@@ -1,5 +1,5 @@
 # Local dep's
-from custom_types import Account
+from .custom_types import Account
 
 # Litecoin dep's
 from litecoinutils.keys import PrivateKey
@@ -11,8 +11,8 @@ from litecoinutils.proxy import NodeProxy
 class Litecoin(object):
     def __init__(
         self,
-        address: str,
-        port: int,
+        address: str = None,
+        port: int = None,
         username: str = None,
         password: str = None
     ):

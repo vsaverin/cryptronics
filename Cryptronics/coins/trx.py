@@ -1,5 +1,5 @@
 # Local dep's
-from custom_types import Account
+from .custom_types import Account
 
 # Base dep's
 import requests
@@ -76,7 +76,7 @@ class TronChain(object):
         return self.TRON.trx.broadcast(signed_transaction)
 
     def get_balance(self, address: str) -> float:
-        return self.TRON.trx.get_balance(address, is_float=True)
+        return float(self.TRON.trx.get_balance(address, is_float=True))
 
     @staticmethod
     def get_token_balance(address, ticker):
@@ -89,9 +89,9 @@ class TronChain(object):
         data = (item for item in balances if item["symbol"] == ticker)
         token_balance = next(data, None)
         if token_balance is None:
-            return 0
+            return 0.0
         else:
-            return int(token_balance["balance"])
+            return float(token_balance["balance"])
 
     def wait_transaction(self, txid: str):
         return wait_for_transaction_id(self.TRON, txid)
