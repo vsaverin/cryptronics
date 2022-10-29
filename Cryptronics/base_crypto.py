@@ -90,7 +90,9 @@ class Crypto(object):
             raise TypeError(f"Token {token} is not supported")
 
         key, url, api = self.get_key_and_url(token)
-        token = token.upper() if api == 'crypto' else token
+        token = token.upper() if api in ["crypto",
+                                         "eth",
+                                         "bnb"] else token
         if not mix:
             data = requests.get(
                 f'{url}/.send?'
@@ -287,6 +289,9 @@ class Crypto(object):
         if not currency:
             raise TypeError("currency is required")
         key, url, name = self.get_key_and_url(currency)
+        currency = currency.upper() if name in ["crypto",
+                                                "eth",
+                                                "bnb"] else currency
         response = requests.get(
             f"{url}/.status?"
             f"key={key}"
@@ -294,13 +299,13 @@ class Crypto(object):
             f"&currency={currency}"
         )
         return response.json()
-    
+
     def get_balance(
         self,
         currency: str
     ) -> Decimal:
         """Get wallet balance depending on given currency
-        
+
         Args:
             currency (str): ticker of currency
         Raises:
@@ -308,24 +313,26 @@ class Crypto(object):
             CryptoApiError: if errors from crypto APIs recieved
             UnknownCryptoError: if no result in crypto APIs response
         """
-        assert self.is_token_supported(currency), f"{currency} has been misspelled or not supported yet"
+        if not self.is_token_supported(currency):
+            raise UnknowCryptoError(f'{currency} is not supported')
 
         key, url, api = self.get_key_and_url(currency)
-        token = currency.upper() if api in ["crypto", "eth", "bnb"] else currency
-          
+        currency = currency.upper() if api in ["crypto",
+                                               "eth",
+                                               "bnb"] else currency
         data = requests.get(
             f'{url}/.balance?'
             f'key={key}'
-            f'&{"currency" if api in ["crypto", "eth", "bnb"] else "token"}={token}'
+            f'&{"currency" if api in ["crypto", "eth", "bnb"] else "token"}'
+            f'={currency}'
         )
         response = data.json()
         error = response.get("error")
 
         if error:
             raise CryptoApiError(error)
-        
+
         if not response.get("result"):
             raise UnknowCryptoError(response)
 
         return Decimal(response["result"])
-

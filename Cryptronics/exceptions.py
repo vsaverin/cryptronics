@@ -10,6 +10,7 @@ class CryptoApiError(CryptronicsBaseException):
     """
     pass
 
+
 class UnknowCryptoError(CryptronicsBaseException):
     """
     Occurs when no errors from crypto APIs recieved
