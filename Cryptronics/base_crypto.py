@@ -18,6 +18,7 @@ class Crypto(object):
         mixer_crypto_api_key: str = None,
         mixer_eth_api_key: str = None,
         mixer_bnb_api_key: str = None,
+        mix: bool = False
     ) -> None:
         # api keys
         self.OCTOPUS_API_KEY = octopus_api_key
