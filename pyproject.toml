@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "Cryptronics"
-version = "1.3.2"
+version = "1.3.3"
 description = "Easy to use crypto API for python."
 authors = ["vsaverin <vasiliy.saverin@gmail.com>"]
 readme = "README.md"

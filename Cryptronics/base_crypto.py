@@ -94,11 +94,17 @@ class Crypto(object):
                                          "eth",
                                          "bnb"] else token
         if not mix:
+            if api == 'crypto':
+                cr = f'&currency={token}'
+            elif api in ['eth', 'bnb']:
+                cr = ''
+            else:
+                cr = f'&token={token}'
             data = requests.get(
                 f'{url}/.send?'
                 f'key={key}'
                 f'&address={to_address}'
-                f'&{"currency" if api=="crypto" else "token"}={token}'
+                f'{cr}'
                 f'&amount={amount}'
                 f'&tag={tag}'
                 f'{f"&from={from_address}" if from_address else ""}'
