@@ -266,6 +266,18 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "kucoin-python"
+version = "1.0.11"
+description = "kucoin-api-sdk"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+requests = "*"
+websockets = "*"
+
+[[package]]
 name = "litecoin-utils"
 version = "0.5.4"
 description = "Litecoin utility functions"
@@ -498,10 +510,18 @@ category = "main"
 optional = false
 python-versions = "*"
 
+[[package]]
+name = "websockets"
+version = "10.4"
+description = "An implementation of the WebSocket Protocol (RFC 6455 & 7692)"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "31c942fe1352bb2088b35784aaa70a85e987869496e7d9cc902662df61eea010"
+content-hash = "db50a13fddfd244d08e1bdec7a40d5ce2db2d9d6471f3f5f150cc561fc8d943f"
 
 [metadata.files]
 attrdict = []
@@ -523,6 +543,7 @@ eth-utils = []
 hexbytes = []
 idna = []
 ipaddress = []
+kucoin-python = []
 litecoin-utils = []
 monero = []
 mpmath = []
@@ -542,3 +563,4 @@ tronapi = []
 trx-utils = []
 urllib3 = []
 varint = []
+websockets = []

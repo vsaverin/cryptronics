@@ -1,8 +1,9 @@
 from decimal import Decimal
 import requests
+import datetime
 
 from .exceptions import CryptoApiError, UnknowCryptoError
-from .mixer import Mixer
+from .crypto_types import MixerWallets, UniqueTags
 
 
 class Crypto(object):
@@ -13,12 +14,10 @@ class Crypto(object):
         crypto_api_key: str = None,
         eth_api_key: str = None,
         bnb_api_key: str = None,
-        using_mixer: bool = False,
-        kucoin_api_key: str = '',
-        kucoin_secret: str = '',
-        passphrase: str = '',
-        outcome_wallets: str = 3,
-
+        mixer_octopus_api_key: str = None,
+        mixer_crypto_api_key: str = None,
+        mixer_eth_api_key: str = None,
+        mixer_bnb_api_key: str = None,
     ) -> None:
         # api keys
         self.OCTOPUS_API_KEY = octopus_api_key
@@ -26,22 +25,17 @@ class Crypto(object):
         self.ETH_API_KEY = eth_api_key
         self.BNB_API_KEY = bnb_api_key
 
+        # mixer api keys
+        self.MIXER_OCTOPUS_API_KEY = mixer_octopus_api_key
+        self.MIXER_CRYPTO_API_KEY = mixer_crypto_api_key
+        self.MIXER_ETH_API_KEY = mixer_eth_api_key
+        self.MIXER_BNB_API_KEY = mixer_bnb_api_key
+
         # api url's
         self.OCTOPUS_URL = 'https://tronapi.net/api'
         self.CRYPTO_URL = 'https://cryptocurrencyapi.net/api'
         self.ETH_URL = 'https://etherapi.net/api/v2'
         self.BNB_URL = 'https://bnbapi.net/api'
-
-        if using_mixer:
-            self.mixer = Mixer(
-                kucoin_api_key,
-                kucoin_secret,
-                passphrase,
-                outcome_wallets,
-                is_sandbox=False
-            )
-        else:
-            self.mixer = None
 
         # tokens supported
         self.SUPPORTED_TOKENS = {
@@ -93,25 +87,22 @@ class Crypto(object):
         token = token.upper() if api in ["crypto",
                                          "eth",
                                          "bnb"] else token
-        if not mix:
-            if api == 'crypto':
-                cr = f'&currency={token}'
-            elif api in ['eth', 'bnb']:
-                cr = ''
-            else:
-                cr = f'&token={token}'
-            data = requests.get(
-                f'{url}/.send?'
-                f'key={key}'
-                f'&address={to_address}'
-                f'{cr}'
-                f'&amount={amount}'
-                f'&tag={tag}'
-                f'{f"&from={from_address}" if from_address else ""}'
-            )
-            response = data.json()
+        if api == 'crypto':
+            cr = f'&currency={token}'
+        elif api in ['eth', 'bnb']:
+            cr = ''
         else:
-            response = self.send_via_mixer(to_address, token, amount, tag)
+            cr = f'&token={token}'
+        data = requests.get(
+            f'{url}/.send?'
+            f'key={key}'
+            f'&address={to_address}'
+            f'{cr}'
+            f'&amount={amount}'
+            f'&tag={tag}'
+            f'{f"&from={from_address}" if from_address else ""}'
+        )
+        response = data.json()
 
         return response
 
@@ -253,22 +244,6 @@ class Crypto(object):
 
         return wallets
 
-    def send_via_mixer(
-        self,
-        to_address: str,
-        token: str,
-        amount: str,
-        tag: str = None,
-        chain: str = ''
-    ):
-        if self.mixer:
-            self.mixer.mixed_send(to_address, token, chain)
-        try:
-            response = self.send(token, to_address, amount, tag)
-            return response
-        except Exception as e:
-            return {'success': False, 'error': e}
-
     def check_transaction(
         self,
         operation_id: str,
@@ -342,3 +317,43 @@ class Crypto(object):
             raise UnknowCryptoError(response)
 
         return Decimal(response["result"])
+
+    def generate_mixer_wallet_tags(self) -> UniqueTags:
+        """Generates unique tags for api's based on timestamp
+
+        Returns:
+            UniqueTags: NamedTuple with three unique tags
+        """
+        return UniqueTags(
+            tag_1=f'mixer-{datetime.datetime.now().timestamp()}-1',
+            tag_2=f'mixer-{datetime.datetime.now().timestamp()}-2',
+            tag_3=f'mixer-{datetime.datetime.now().timestamp()}-3',
+        )
+
+    def generate_mixer_wallets(
+        self,
+        coin: str
+    ) -> MixerWallets:
+        """Generates new wallets to mix coins
+
+        Args:
+            coin (str): sended coin ticker
+
+        Returns:
+            MixerWallets: NamedTuple with three new wallets
+        """
+        tags = self.generate_mixer_wallet_tags()
+        return MixerWallets(
+            first_wallet=self.create_wallet(
+                token=coin,
+                tag=tags.tag_1
+            ),
+            second_wallet=self.create_wallet(
+                token=coin,
+                tag=tags.tag_2
+            ),
+            third_wallet=self.create_wallet(
+                token=coin,
+                tag=tags.tag_3
+            )
+        )
