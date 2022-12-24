@@ -2,8 +2,11 @@ from decimal import Decimal
 import requests
 import datetime
 
+
+from .injection_detector import InjectionDetector
 from .exceptions import CryptoApiError, UnknowCryptoError
 from .crypto_types import MixerWallets, UniqueTags
+
 
 
 class Crypto(object):
@@ -70,6 +73,7 @@ class Crypto(object):
             TypeError: if to_address isn't specified
             TypeError: if amount isn't specified
             TypeError: if token doesn't supported
+            InjectionException: if injection was detected
 
         Returns:
             dict: response from API service
@@ -83,6 +87,15 @@ class Crypto(object):
             raise TypeError("'amount' is required argument")
         if not self.is_token_supported(token):
             raise TypeError(f"Token {token} is not supported")
+        
+        detector = InjectionDetector({
+            "address": to_address,
+            "token": token,
+            "amount": amount,
+            "tag": tag
+        })
+
+        detector.detect(raise_exception=True)
 
         key, url, api = self.get_key_and_url(token)
         token = token.upper() if api in ["crypto",
