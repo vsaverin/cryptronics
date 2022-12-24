@@ -22,9 +22,6 @@ class InjectionDetector:
     def __init__(self, query_params: dict):
         self._qp = query_params
 
-    # def escape(self, string):
-    #     return string.replace(self.injection, "\\" + self.injection)
-
     def detect(self, raise_exception: bool = False) -> bool:
         for param in self._qp:
             detector = self._detectors.get(param)
