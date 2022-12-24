@@ -1,0 +1,2 @@
+class BinanceChain(object):
+    pass
