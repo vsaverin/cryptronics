@@ -138,7 +138,7 @@ class Mixer:
         response = requests.request(
             url=url,
             method=method,
-            data=data,
+            data=json.dumps(data),
             headers=headers
         )
         return response
