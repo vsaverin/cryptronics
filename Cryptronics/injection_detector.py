@@ -42,7 +42,13 @@ class AddressDetector(IDetector):
 
     @staticmethod
     def has_injection(string: str) -> bool:
-        return "&" in string or "?" in string or ";" in string
+        markers = ["&", "?", " ", ";", ":"]
+        
+        for marker in markers:
+            if marker in string:
+                return True
+
+        return False
 
 
 class TokenDetector(AddressDetector):
