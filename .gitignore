@@ -121,6 +121,7 @@ celerybeat.pid
 
 # Environments
 .vscode
+.pypirc
 .env
 .venv
 env/
