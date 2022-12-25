@@ -44,8 +44,8 @@ class AddressDetector(IDetector):
     def has_injection(string: str) -> bool:
         markers = ["&", "?", " ", ";", ":"]
         
-        for marker in markers:
-            if marker in string:
+        for char in string:
+            if char in markers:
                 return True
 
         return False
