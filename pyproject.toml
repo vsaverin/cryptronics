@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "Cryptronics"
+version = "1.4"
+description = "Easy to use crypto API for python."
+authors = ["vsaverin <vasiliy.saverin@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+tronapi = "^3.1.6"
+litecoin-utils = "^0.5.4"
+monero = "^1.1.1"
+kucoin-python = "^1.0.11"
+python-dogecoin = "^0.0.4"
+bitcoin = "^1.1.42"
+bit = "^0.8.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,2 @@
+class EthereumChain(object):
+    pass
